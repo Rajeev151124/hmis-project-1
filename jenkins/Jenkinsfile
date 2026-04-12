@@ -4,6 +4,7 @@ pipeline {
     environment {
         DOCKER_USER = "rajeevreddy1511"
         IMAGE_TAG = "v${BUILD_NUMBER}"
+        KUBECONFIG = "/etc/rancher/k3s/k3s.yaml"   // ✅ added line
     }
 
     stages {
