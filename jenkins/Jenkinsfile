@@ -1,55 +1,68 @@
 pipeline {
-agent any
+    agent any
 
-```
-environment {
-    IMAGE_TAG = "${BUILD_NUMBER}"
-    REGISTRY = "rajeevreddy1511"
+    environment {
+        DOCKER_USER = "rajeevreddy1511"
+        IMAGE_TAG = "v${BUILD_NUMBER}"
+    }
+
+    stages {
+
+        stage('Clone Code') {
+            steps {
+                git 'https://github.com/your-username/your-repo.git'
+            }
+        }
+
+        stage('Build Patient Image') {
+            steps {
+                sh 'docker build -t $DOCKER_USER/patient-service-1:$IMAGE_TAG ./patient-service'
+            }
+        }
+
+        stage('Build Visit Image') {
+            steps {
+                sh 'docker build -t $DOCKER_USER/visit-service-1:$IMAGE_TAG ./visit-service'
+            }
+        }
+
+        stage('Build Frontend Image') {
+            steps {
+                sh 'docker build -t $DOCKER_USER/frontend-service-1:$IMAGE_TAG ./frontend'
+            }
+        }
+
+        stage('Docker Login & Push') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'docker-creds',
+                    usernameVariable: 'USER',
+                    passwordVariable: 'PASS'
+                )]) {
+                    sh '''
+                    echo $PASS | docker login -u $USER --password-stdin
+                    docker push $DOCKER_USER/patient-service-1:$IMAGE_TAG
+                    docker push $DOCKER_USER/visit-service-1:$IMAGE_TAG
+                    docker push $DOCKER_USER/frontend-service-1:$IMAGE_TAG
+                    '''
+                }
+            }
+        }
+
+        stage('Update K8s Deployment') {
+            steps {
+                sh '''
+                sed -i "s|patient-service-1:.*|patient-service-1:$IMAGE_TAG|" k8s/patient-deploy.yaml
+                sed -i "s|visit-service-1:.*|visit-service-1:$IMAGE_TAG|" k8s/visit-deploy.yaml
+                sed -i "s|frontend-service-1:.*|frontend-service-1:$IMAGE_TAG|" k8s/frontend-deploy.yaml
+                '''
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                sh 'kubectl apply -f k8s/'
+            }
+        }
+    }
 }
-
-stages {
-
-    stage('Clone') {
-        steps {
-            git branch: 'main', url: 'https://github.com/Rajeev151124/hmis-project-1.git'
-        }
-    }
-
-    stage('Build') {
-        steps {
-            sh """
-            docker build -t $REGISTRY/patient-service-1:$IMAGE_TAG ./patient-service-1
-            docker build -t $REGISTRY/visit-service-1:$IMAGE_TAG ./visit-service-1
-            docker build -t $REGISTRY/frontend-service-1:$IMAGE_TAG ./frontend-service-1
-            """
-        }
-    }
-
-    stage('Push') {
-        steps {
-            sh """
-            docker push $REGISTRY/patient-service-1:$IMAGE_TAG
-            docker push $REGISTRY/visit-service-1:$IMAGE_TAG
-            docker push $REGISTRY/frontend-service-1:$IMAGE_TAG
-            """
-        }
-    }
-
-    stage('Deploy') {
-        steps {
-            sh """
-            set -e
-
-            sed -i 's|patient-service-1:.*|patient-service-1:$IMAGE_TAG|' k8s/patient-deployment.yaml
-            sed -i 's|visit-service-1:.*|visit-service-1:$IMAGE_TAG|' k8s/visit-deployment.yaml
-            sed -i 's|frontend-service-1:.*|frontend-service-1:$IMAGE_TAG|' k8s/frontend-deployment.yaml
-
-            kubectl apply -f k8s/
-            """
-        }
-    }
-}
-```
-
-}
-
