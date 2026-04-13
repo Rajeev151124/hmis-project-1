@@ -1,66 +1,33 @@
 pipeline {
     agent any
 
+    parameters {
+        string(name: 'IMAGE_TAG', defaultValue: 'v1', description: 'Image tag')
+    }
+
     environment {
         DOCKER_USER = "rajeevreddy1511"
-        IMAGE_TAG = "v${BUILD_NUMBER}"
-        KUBECONFIG = "/var/lib/jenkins/kubeconfig"   // ✅ added line
     }
 
     stages {
 
         stage('Clone Code') {
             steps {
-                git branch:'main', url: 'https://github.com/Rajeev151124/hmis-project-1'
+                git 'https://github.com/Rajeev151124/hmis-project-1.git'
             }
         }
 
-        stage('Build Patient Image') {
-            steps {
-                sh 'docker build -t $DOCKER_USER/patient-service-1:$IMAGE_TAG ./patient-service'
-            }
-        }
-
-        stage('Build Visit Image') {
-            steps {
-                sh 'docker build -t $DOCKER_USER/visit-service-1:$IMAGE_TAG ./visit-service'
-            }
-        }
-
-        stage('Build Frontend Image') {
-            steps {
-                sh 'docker build -t $DOCKER_USER/frontend-service-1:$IMAGE_TAG ./frontend'
-            }
-        }
-
-        stage('Docker Login & Push') {
-            steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'docker-creds',
-                    usernameVariable: 'USER',
-                    passwordVariable: 'PASS'
-                )]) {
-                    sh '''
-                    echo $PASS | docker login -u $USER --password-stdin
-                    docker push $DOCKER_USER/patient-service-1:$IMAGE_TAG
-                    docker push $DOCKER_USER/visit-service-1:$IMAGE_TAG
-                    docker push $DOCKER_USER/frontend-service-1:$IMAGE_TAG
-                    '''
-                }
-            }
-        }
-
-        stage('Update K8s Deployment') {
+        stage('Update YAML') {
             steps {
                 sh '''
-                sed -i "s|patient-service-1:.*|patient-service-1:$IMAGE_TAG|" k8s/patient-deploy.yaml
-                sed -i "s|visit-service-1:.*|visit-service-1:$IMAGE_TAG|" k8s/visit-deploy.yaml
-                sed -i "s|frontend-service-1:.*|frontend-service-1:$IMAGE_TAG|" k8s/frontend-deploy.yaml
+                sed -i "s|patient-service-1:.*|patient-service-1:${IMAGE_TAG}|" k8s/patient-deploy.yaml
+                sed -i "s|visit-service-1:.*|visit-service-1:${IMAGE_TAG}|" k8s/visit-deploy.yaml
+                sed -i "s|frontend-service-1:.*|frontend-service-1:${IMAGE_TAG}|" k8s/frontend-deploy.yaml
                 '''
             }
         }
 
-        stage('Deploy to Kubernetes') {
+        stage('Deploy') {
             steps {
                 sh 'kubectl apply -f k8s/'
             }
