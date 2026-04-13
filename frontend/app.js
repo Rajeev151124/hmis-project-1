@@ -23,28 +23,35 @@ async function addPatient() {
       name: document.getElementById("pname").value,
       age: document.getElementById("page").value,
       gender: document.getElementById("pgender").value,
-      disease: document.getElementById("pdisease").value	    
+      disease: document.getElementById("pdisease").value
     };
 
     const res = await fetch(`/patients`, {
       method: "POST",
-      headers: {"Content-Type": "application/json"},
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
     });
 
-    if (!res.ok) throw new Error("Failed");
+    const result = await res.json(); // ✅ FIX
+
+    console.log("Patient Response:", result);
+
+    if (!res.ok) {
+      throw new Error(result.error || "Failed");
+    }
 
     alert("Patient Saved ✅");
 
+    // Clear fields
     document.getElementById("pname").value = "";
     document.getElementById("page").value = "";
     document.getElementById("pgender").value = "";
-    document.getElementById("pdisease").value = "";	  
+    document.getElementById("pdisease").value = "";
 
     loadPatients();
 
   } catch (err) {
-    console.error(err);
+    console.error("FULL ERROR:", err);
     alert("Error saving patient ❌");
   }
 }
@@ -65,7 +72,7 @@ async function loadPatients() {
           <td>${p.name}</td>
           <td>${p.age}</td>
           <td>${p.gender}</td>
-	  <td>${p.disease || ""}</td>
+          <td>${p.disease || ""}</td>
         </tr>
       `;
     });
@@ -112,11 +119,17 @@ async function addVisit() {
 
     const res = await fetch(`/visits`, {
       method: "POST",
-      headers: {"Content-Type": "application/json"},
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
     });
 
-    if (!res.ok) throw new Error("Failed");
+    const result = await res.json(); // ✅ FIX
+
+    console.log("Visit Response:", result);
+
+    if (!res.ok) {
+      throw new Error(result.error || "Failed");
+    }
 
     alert("Visit Saved ✅");
 
@@ -126,7 +139,7 @@ async function addVisit() {
     loadVisits();
 
   } catch (err) {
-    console.error(err);
+    console.error("FULL ERROR:", err);
     alert("Error saving visit ❌");
   }
 }
