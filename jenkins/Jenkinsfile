@@ -29,6 +29,7 @@ pipeline {
 
         stage('Deploy') {
             steps {
+                sh 'export KUBECONFIG=/etc/rancher/k3s/k3s.yaml'
                 sh 'kubectl apply -f k8s/'
             }
         }
