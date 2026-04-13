@@ -15,5 +15,6 @@ spec:
       containers:
       - name: frontend
         image: rajeevreddy1511/frontend-service-1:v7
+        imagePullPolicy: Always   # 👈 ADD THIS  
         ports:
         - containerPort: 80

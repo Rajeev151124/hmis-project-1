@@ -7,13 +7,14 @@ pipeline {
 
     environment {
         DOCKER_USER = "rajeevreddy1511"
+        KUBECONFIG = "/etc/rancher/k3s/k3s.yaml"
     }
 
     stages {
 
         stage('Clone Code') {
             steps {
-                git branch: 'main',url: 'https://github.com/Rajeev151124/hmis-project-1.git'
+                git branch: 'main', url: 'https://github.com/Rajeev151124/hmis-project-1.git'
             }
         }
 
@@ -29,8 +30,12 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                sh 'export KUBECONFIG=/etc/rancher/k3s/k3s.yaml'
-                sh 'kubectl apply -f k8s/'
+                sh '''
+                kubectl apply -f k8s/
+                kubectl rollout restart deployment frontend-service
+                kubectl rollout restart deployment patient-service
+                kubectl rollout restart deployment visit-service
+                '''
             }
         }
     }
