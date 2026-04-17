@@ -25,24 +25,7 @@ spec:
             port:
               number: 3001
 
-      # 🔥 IMPORTANT: Static files
-      - path: /app.js
-        pathType: Prefix
-        backend:
-          service:
-            name: frontend-service
-            port:
-              number: 80
-
-      - path: /style.css
-        pathType: Prefix
-        backend:
-          service:
-            name: frontend-service
-            port:
-              number: 80
-
-      # Frontend UI
+      # Frontend (handles EVERYTHING else)
       - path: /
         pathType: Prefix
         backend:

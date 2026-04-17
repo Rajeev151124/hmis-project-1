@@ -13,8 +13,14 @@ spec:
         app: frontend
     spec:
       containers:
-      - name: frontend
-        image: rajeevreddy1511/frontend-service-1:v7
-        imagePullPolicy: Always   # 👈 ADD THIS  
-        ports:
-        - containerPort: 80
+        - name: frontend
+          image: rajeevreddy1511/frontend-service-1:v7
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
