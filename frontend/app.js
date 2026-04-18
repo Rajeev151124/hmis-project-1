@@ -23,7 +23,8 @@ async function addPatient() {
       name: document.getElementById("pname").value,
       age: document.getElementById("page").value,
       gender: document.getElementById("pgender").value,
-      disease: document.getElementById("pdisease").value
+      disease: document.getElementById("pdisease").value,
+      dob: document.getElementById("pdob").value   // ✅ NEW
     };
 
     const res = await fetch(`/patients`, {
@@ -32,7 +33,7 @@ async function addPatient() {
       body: JSON.stringify(data)
     });
 
-    const result = await res.json(); // ✅ FIX
+    const result = await res.json();
 
     console.log("Patient Response:", result);
 
@@ -47,6 +48,7 @@ async function addPatient() {
     document.getElementById("page").value = "";
     document.getElementById("pgender").value = "";
     document.getElementById("pdisease").value = "";
+    document.getElementById("pdob").value = "";   // ✅ clear DOB
 
     loadPatients();
 
@@ -73,6 +75,7 @@ async function loadPatients() {
           <td>${p.age}</td>
           <td>${p.gender}</td>
           <td>${p.disease || ""}</td>
+          <td>${p.dob || ""}</td> <!-- ✅ SHOW DOB -->
         </tr>
       `;
     });
@@ -123,7 +126,7 @@ async function addVisit() {
       body: JSON.stringify(data)
     });
 
-    const result = await res.json(); // ✅ FIX
+    const result = await res.json();
 
     console.log("Visit Response:", result);
 

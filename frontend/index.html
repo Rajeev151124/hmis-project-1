@@ -13,28 +13,39 @@
   <button onclick="showVisit()">Visit</button>
 </div>
 
-<!-- Patient Screen -->
+<!-- ================= PATIENT SCREEN ================= -->
 <div id="patientScreen">
   <h2>Patient Registration</h2>
 
   <input id="pname" placeholder="Name">
   <input id="page" placeholder="Age">
   <input id="pgender" placeholder="Gender">
-  <input id="pdisease" placeholder="Disease">   <!-- NEW -->
+
+  <!-- ✅ NEW DOB FIELD -->
+  <label>Date of Birth</label>
+  <input type="date" id="pdob">
+
+  <input id="pdisease" placeholder="Disease">
+
   <button onclick="addPatient()">Save Patient</button>
 
   <h3>Patient List</h3>
   <table border="1">
     <thead>
       <tr>
-        <th>ID</th><th>Name</th><th>Age</th><th>Gender</th><th>Disease</th>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Gender</th>
+        <th>Disease</th>
+        <th>DOB</th> <!-- ✅ NEW COLUMN -->
       </tr>
     </thead>
     <tbody id="patientTable"></tbody>
   </table>
 </div>
 
-<!-- Visit Screen -->
+<!-- ================= VISIT SCREEN ================= -->
 <div id="visitScreen" style="display:none;">
   <h2>Visit Entry</h2>
 
@@ -44,13 +55,16 @@
 
   <input id="vdoctor" placeholder="Doctor">
   <input id="vdate" placeholder="Date">
+
   <button onclick="addVisit()">Save Visit</button>
 
   <h3>Visit List</h3>
   <table border="1">
     <thead>
       <tr>
-        <th>Patient</th><th>Doctor</th><th>Date</th>
+        <th>Patient</th>
+        <th>Doctor</th>
+        <th>Date</th>
       </tr>
     </thead>
     <tbody id="visitTable"></tbody>
