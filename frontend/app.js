@@ -22,9 +22,10 @@ async function addPatient() {
     const data = {
       name: document.getElementById("pname").value,
       age: document.getElementById("page").value,
-      gender: document.getElementById("pgender").value || "",  // ✅ FIXED HERE
+      gender: document.getElementById("pgender").value || "",
       disease: document.getElementById("pdisease").value,
-      dob: document.getElementById("pdob").value
+      dob: document.getElementById("pdob").value,
+      email: document.getElementById("pemail").value   // ✅ NEW FIELD
     };
 
     const res = await fetch(`/patients`, {
@@ -49,6 +50,7 @@ async function addPatient() {
     document.getElementById("pgender").value = "";
     document.getElementById("pdisease").value = "";
     document.getElementById("pdob").value = "";
+    document.getElementById("pemail").value = "";   // ✅ CLEAR EMAIL
 
     loadPatients();
 
@@ -76,6 +78,7 @@ async function loadPatients() {
           <td>${p.gender || ""}</td>
           <td>${p.disease || ""}</td>
           <td>${p.dob || ""}</td>
+          <td>${p.email || ""}</td>  <!-- ✅ NEW COLUMN -->
         </tr>
       `;
     });

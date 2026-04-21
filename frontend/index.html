@@ -20,7 +20,7 @@
   <input id="pname" placeholder="Name">
   <input id="page" placeholder="Age">
 
-  <!-- ✅ UPDATED GENDER DROPDOWN -->
+  <!-- Gender Dropdown -->
   <label>Gender</label>
   <select id="pgender">
     <option value="">Select Gender</option>
@@ -29,9 +29,12 @@
     <option value="Other">Other</option>
   </select>
 
-  <!-- ✅ DOB FIELD -->
+  <!-- DOB -->
   <label>Date of Birth</label>
   <input type="date" id="pdob">
+
+  <!-- NEW EMAIL FIELD -->
+  <input id="pemail" placeholder="Email">
 
   <input id="pdisease" placeholder="Disease">
 
@@ -47,6 +50,7 @@
         <th>Gender</th>
         <th>Disease</th>
         <th>DOB</th>
+        <th>Email</th> <!-- NEW -->
       </tr>
     </thead>
     <tbody id="patientTable"></tbody>
@@ -80,7 +84,7 @@
 </div>
 
 <!-- Cache busting -->
-<script src="/app.js?v=9999"></script>
+<script src="/app.js?v=20000"></script>
 
 </body>
 </html>
