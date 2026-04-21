@@ -3,10 +3,19 @@ kind: Deployment
 metadata:
   name: visit-service
 spec:
-  replicas: 1
+  replicas: 4
+
+  # ✅ Rolling Update Strategy
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+
   selector:
     matchLabels:
       app: visit
+
   template:
     metadata:
       labels:
@@ -14,7 +23,7 @@ spec:
     spec:
       containers:
         - name: visit
-          image: rajeevreddy1511/visit-service-1:v2
+          image: rajeevreddy1511/visit-service-1:v16
           imagePullPolicy: Always
           ports:
             - containerPort: 3001

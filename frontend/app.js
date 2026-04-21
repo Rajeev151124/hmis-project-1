@@ -22,9 +22,9 @@ async function addPatient() {
     const data = {
       name: document.getElementById("pname").value,
       age: document.getElementById("page").value,
-      gender: document.getElementById("pgender").value,
+      gender: document.getElementById("pgender").value || "",  // ✅ FIXED HERE
       disease: document.getElementById("pdisease").value,
-      dob: document.getElementById("pdob").value   // ✅ NEW
+      dob: document.getElementById("pdob").value
     };
 
     const res = await fetch(`/patients`, {
@@ -48,7 +48,7 @@ async function addPatient() {
     document.getElementById("page").value = "";
     document.getElementById("pgender").value = "";
     document.getElementById("pdisease").value = "";
-    document.getElementById("pdob").value = "";   // ✅ clear DOB
+    document.getElementById("pdob").value = "";
 
     loadPatients();
 
@@ -73,9 +73,9 @@ async function loadPatients() {
           <td>${p._id}</td>
           <td>${p.name}</td>
           <td>${p.age}</td>
-          <td>${p.gender}</td>
+          <td>${p.gender || ""}</td>
           <td>${p.disease || ""}</td>
-          <td>${p.dob || ""}</td> <!-- ✅ SHOW DOB -->
+          <td>${p.dob || ""}</td>
         </tr>
       `;
     });

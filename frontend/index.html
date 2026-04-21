@@ -19,9 +19,17 @@
 
   <input id="pname" placeholder="Name">
   <input id="page" placeholder="Age">
-  <input id="pgender" placeholder="Gender">
 
-  <!-- ✅ NEW DOB FIELD -->
+  <!-- ✅ UPDATED GENDER DROPDOWN -->
+  <label>Gender</label>
+  <select id="pgender">
+    <option value="">Select Gender</option>
+    <option value="Male">Male</option>
+    <option value="Female">Female</option>
+    <option value="Other">Other</option>
+  </select>
+
+  <!-- ✅ DOB FIELD -->
   <label>Date of Birth</label>
   <input type="date" id="pdob">
 
@@ -38,7 +46,7 @@
         <th>Age</th>
         <th>Gender</th>
         <th>Disease</th>
-        <th>DOB</th> <!-- ✅ NEW COLUMN -->
+        <th>DOB</th>
       </tr>
     </thead>
     <tbody id="patientTable"></tbody>

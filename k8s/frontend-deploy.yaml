@@ -3,10 +3,17 @@ kind: Deployment
 metadata:
   name: frontend-service
 spec:
-  replicas: 1
+  replicas: 4 # ✅ ADD HERE
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+
   selector:
     matchLabels:
       app: frontend
+
   template:
     metadata:
       labels:
@@ -14,7 +21,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: rajeevreddy1511/frontend-service-1:v7
+          image: rajeevreddy1511/frontend-service-1:v16
           imagePullPolicy: Always
           ports:
             - containerPort: 80

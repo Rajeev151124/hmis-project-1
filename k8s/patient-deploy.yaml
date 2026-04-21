@@ -3,10 +3,19 @@ kind: Deployment
 metadata:
   name: patient-service
 spec:
-  replicas: 1
+  replicas: 4
+
+  # ✅ Rolling Update Strategy
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+
   selector:
     matchLabels:
       app: patient
+
   template:
     metadata:
       labels:
@@ -14,7 +23,7 @@ spec:
     spec:
       containers:
         - name: patient
-          image: rajeevreddy1511/patient-service-1:v3
+          image: rajeevreddy1511/patient-service-1:v16
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
