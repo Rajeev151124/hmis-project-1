@@ -8,7 +8,16 @@ spec:
   - http:
       paths:
 
-      # Backend APIs
+      # 🔥 ADD THIS
+      - path: /grafana
+        pathType: Prefix
+        backend:
+          service:
+            name: monitoring-grafana
+            port:
+              number: 80
+
+      # Existing
       - path: /patients
         pathType: Prefix
         backend:
@@ -25,7 +34,6 @@ spec:
             port:
               number: 3001
 
-      # Frontend (handles EVERYTHING else)
       - path: /
         pathType: Prefix
         backend:

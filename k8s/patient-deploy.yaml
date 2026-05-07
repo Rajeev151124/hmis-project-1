@@ -3,12 +3,12 @@ kind: Deployment
 metadata:
   name: patient-service
 spec:
-  replicas: 4
+  replicas: 2
 
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxUnavailable: 1
+      maxUnavailable: 0
       maxSurge: 1
 
   selector:
@@ -20,12 +20,26 @@ spec:
       labels:
         app: patient
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app: patient
+            topologyKey: "kubernetes.io/hostname"
+
       containers:
         - name: patient
           image: rajeevreddy1511/patient-service-1:v19
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
+
+          resources:
+            requests:
+              cpu: "100m"
+            limits:
+              cpu: "500m"
 
           env:
             - name: DB_USER
@@ -40,7 +54,6 @@ spec:
                   name: hmis-secret
                   key: MONGO_INITDB_ROOT_PASSWORD
 
-          # 🔥 READINESS PROBE (traffic control)
           readinessProbe:
             httpGet:
               path: /health
@@ -48,7 +61,6 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 5
 
-          # 🔥 LIVENESS PROBE (auto-restart)
           livenessProbe:
             httpGet:
               path: /health
