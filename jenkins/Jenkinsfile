@@ -7,7 +7,7 @@ pipeline {
 
     environment {
         DOCKER_USER = "rajeevreddy1511"
-        KUBECONFIG = "/etc/rancher/k3s/k3s.yaml"
+        KUBECONFIG = "/var/lib/jenkins/.kube/config"
     }
 
     stages {
