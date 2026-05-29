@@ -1,0 +1,43 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hmis-ingress
+spec:
+  ingressClassName: {{ .Values.ingress.className }}
+  rules:
+  - http:
+      paths:
+
+      # 🔥 ADD THIS
+      - path: {{ .Values.ingress.paths.grafana }}
+        pathType: Prefix
+        backend:
+          service:
+            name: monitoring-grafana
+            port:
+              number: 80
+
+      # Existing
+      - path: {{ .Values.ingress.paths.patients }}
+        pathType: Prefix
+        backend:
+          service:
+            name: patient-service
+            port:
+              number: 3000
+
+      - path: {{ .Values.ingress.paths.visits }}
+        pathType: Prefix
+        backend:
+          service:
+            name: visit-service
+            port:
+              number: 3001
+
+      - path: {{ .Values.ingress.paths.frontend }}
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend-service
+            port:
+              number: 80

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: visit-service
+spec:
+  type: {{ .Values.visit.service.type }}
+  selector:
+    app: visit
+  ports:
+    - port: {{ .Values.visit.service.port }}
+      targetPort: 3001
+      

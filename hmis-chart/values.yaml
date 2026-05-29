@@ -1,0 +1,71 @@
+patient:
+  replicaCount: 4
+
+  image:
+    repository: rajeevreddy1511/patient-service-1
+    tag: v21
+    pullPolicy: IfNotPresent
+
+  service:
+    type: ClusterIP
+    port: 3000
+
+  hpa:
+    minReplicas: 2
+    maxReplicas: 5
+    cpuUtilization: 50    
+
+visit:
+  replicaCount: 2
+
+  image:
+    repository: rajeevreddy1511/visit-service-1
+    tag: v21
+    pullPolicy: IfNotPresent
+
+  service:
+    type: ClusterIP
+    port: 3001
+
+frontend:
+  replicaCount: 2
+
+  image:
+    repository: rajeevreddy1511/frontend-service-1
+    tag: v21
+    pullPolicy: IfNotPresent
+
+  service:
+    type: ClusterIP
+    port: 80
+
+config:
+  mongoUrl: mongodb://mongo:27017/hmis
+
+secrets:
+  mongoUser: myuser
+  mongoPassword: mypassword
+
+ingress:
+  enabled: true
+
+  className: traefik
+
+  paths:
+    grafana: /grafana
+    patients: /patients
+    visits: /visits
+    frontend: /
+
+mongo:
+  replicaCount: 1
+
+  image:
+    repository: mongo
+    tag: latest
+
+  storage:
+    size: 1Gi
+
+  service:
+    port: 27017
